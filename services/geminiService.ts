@@ -23,35 +23,37 @@ export interface EmotionalCopyResult {
 
 export const generateSentenceAndPrompt = async (theme: string, emotion: string, imageStyle: string): Promise<GenerationResult> => {
   const prompt = `
-    당신은 2025년 최신 Threads 및 인스타그램 알고리즘을 마스터한 '바이럴 콘텐츠 전략가'입니다.
-    당신의 목표는 사용자가 스크롤을 멈추게 만드는 '강력한 첫 문장(Hook)'과 '클릭을 유도하는 이미지 프롬프트'를 만드는 것입니다.
+    당신은 2025년 최신 Threads 및 인스타그램 알고리즘을 완벽하게 파악한 '바이럴 콘텐츠 전략가'입니다.
+    단순한 글짓기가 아니라, 사용자의 **스크롤을 멈추게(Stop Scroll)** 하고 **반응(댓글, 공유)을 이끌어내는** 것이 유일한 목표입니다.
 
     [입력 데이터]
     - 주제(Theme): ${theme}
-    - 감정(Emotion): ${emotion}
-    - 이미지 스타일(Image Style): ${imageStyle}
+    - 타겟 감정(Emotion): ${emotion}
+    - 비주얼 스타일: ${imageStyle}
 
-    [최신 알고리즘 기반 작성 전략]
-    1. **The Gap Theory (공백 이론):** 독자의 호기심을 자극하여 "더 보기"를 누르게 만드세요.
-    2. **Deep Relatability (깊은 공감):** "나만 이런 게 아니구나"라는 안도감을 주거나, "내 얘기네"라는 반응을 이끌어내세요.
-    3. **Contrarian (반전/논쟁):** 일반적인 통념을 뒤집는 문장으로 댓글 참여를 유도하세요.
-    4. **Short & Punchy:** 모바일 환경에서 가독성이 좋도록 40자 이내로 짧게 끊으세요.
+    [최강 노출을 위한 알고리즘 해킹 전략]
+    1. **The Curiosity Gap (호기심 공백):** 정보를 다 주지 마세요. 문장을 읽고 나서 "그래서?" 혹은 "진짜?"라는 궁금증이 폭발하게 만드세요.
+    2. **Contrarian (반전/논쟁):** 대다수가 믿는 통념을 깨부수거나, 뻔한 위로 대신 뼈 때리는 현실을 말하세요.
+    3. **Deep Relatability (극단적 공감):** "이거 완전 내 얘긴데?" 싶을 정도로 구체적인 상황을 묘사하여 '저장'과 '공유'를 유도하세요.
+    4. **Hook First:** 첫 5어절 안에 승부를 봅니다. 지루한 서론은 절대 금지입니다.
 
     [작성 규칙]
-    1️⃣ **첫 문장 (한글):**
-       - 단순한 설명 금지. (X: 오늘은 날씨가 좋다. -> O: 날씨가 좋아서 퇴사하고 싶어졌다.)
-       - 질문형(?), 선언형(!), 혹은 독백형(...)을 적절히 섞어 가장 '도파민'을 자극하는 문장 하나만 출력하세요.
-       - 입력된 '감정'을 직접 언급하지 말고, 상황이나 뉘앙스로 보여주세요 (Show, Don't Tell).
+    1️⃣ **바이럴 훅 (첫 문장 - 한글):**
+       - **절대 금지:** "~해요", "~습니다" 같은 설명조 어미. "오늘은..."으로 시작하는 일기장 스타일.
+       - **권장:** 짧고 강렬한 단문. 질문형(?), 도발적인 선언(!), 혹은 말하다 만 듯한 여운(...).
+       - 문장은 40자 이내로 모바일 가독성을 극대화하세요.
+       - 감정을 직접 설명하지 말고, 그 감정이 드는 **'구체적인 찰나의 순간'**을 포착하세요.
     
     2️⃣ **이미지 프롬프트 (영어):**
-       - SNS 피드에서 눈에 띄도록 **고대비(High Contrast)**, **중앙 구도(Center Composition)**, **심미적 조명(Aesthetic Lighting)**을 강조하세요.
-       - ${imageStyle} 스타일을 기반으로 하되, 복잡한 디테일보다는 직관적이고 감각적인 비주얼을 묘사하세요.
+       - 피드에서 시선을 강탈하는 **High Contrast(고대비)**, **Center Composition(중앙 구도)**.
+       - ${imageStyle} 스타일을 적용하되, 복잡한 배경을 제거하고 피사체를 강조하여 작은 모바일 화면에서도 명확하게 보이게 하세요.
+       - 텍스트가 들어갈 여백(Negative Space)을 고려한 구도를 잡으세요.
 
-    [출력 형식]
-    반드시 아래 형식을 지켜주세요.
+    [출력 형식 - 변경 불가]
+    반드시 아래 형식을 그대로 지켜주세요.
 
     ✨ 노출 최적화 첫 문장:
-    (여기에 완성된 한글 문장 작성)
+    (여기에 완성된 훅 작성)
     🖼️ 이미지 프롬프트:
     (여기에 완성된 영어 이미지 프롬프트 작성)
   `;
@@ -61,7 +63,7 @@ export const generateSentenceAndPrompt = async (theme: string, emotion: string, 
       model: textModel,
       contents: prompt,
       config: {
-        temperature: 0.8, // 창의성을 높여 다양한 훅 생성
+        temperature: 0.85, // 독창적이고 예상치 못한 훅을 위해 온도 상향
       }
     });
     const text = response.text;
@@ -71,7 +73,7 @@ export const generateSentenceAndPrompt = async (theme: string, emotion: string, 
     
     if (!sentenceMatch || !imagePromptMatch) {
       console.error("Failed to parse model response:", text);
-      throw new Error("모델 응답을 분석하는 데 실패했습니다. 형식이 예상과 다릅니다.");
+      throw new Error("모델 응답 형식이 올바르지 않습니다. 다시 시도해주세요.");
     }
 
     const sentence = sentenceMatch[1].trim();
@@ -83,7 +85,7 @@ export const generateSentenceAndPrompt = async (theme: string, emotion: string, 
     if (error instanceof Error) {
         throw error;
     }
-    throw new Error("알 수 없는 오류가 발생했습니다.");
+    throw new Error("알고리즘 분석 중 오류가 발생했습니다.");
   }
 };
 
@@ -95,7 +97,7 @@ export const generateImage = async (prompt: string): Promise<string> => {
             config: {
               numberOfImages: 1,
               outputMimeType: 'image/jpeg',
-              aspectRatio: '1:1',
+              aspectRatio: '1:1', // 인스타그램/스레드 피드 최적화
             },
         });
 
@@ -103,14 +105,14 @@ export const generateImage = async (prompt: string): Promise<string> => {
             const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
             return `data:image/jpeg;base64,${base64ImageBytes}`;
         } else {
-            throw new Error("생성된 이미지가 없습니다.");
+            throw new Error("이미지 생성에 실패했습니다.");
         }
     } catch (error) {
         console.error("Error generating image:", error);
         if (error instanceof Error) {
-            throw new Error(`이미지 생성 중 오류 발생: ${error.message}`);
+            throw new Error(`이미지 생성 실패: ${error.message}`);
         }
-        throw new Error("이미지 생성 중 알 수 없는 오류가 발생했습니다.");
+        throw new Error("이미지 생성 중 오류가 발생했습니다.");
     }
 }
 
@@ -121,32 +123,31 @@ export const generateEmotionalCopy = async (
     style: string
 ): Promise<EmotionalCopyResult> => {
     const prompt = `
-        당신은 감성 에세이 작가이자 인스타그램 감성 계정 운영자입니다.
-        사용자가 올린 사진을 분석하여, '저장하고 싶은' 감성 글귀를 작성하세요.
+        당신은 수만 팔로워를 보유한 '감성 큐레이터'입니다.
+        이 사진을 보고 사람들이 '저장' 버튼을 누르게 만들 감성 카피를 작성하세요.
 
         [입력 정보]
-        - 감정 강도: ${intensity} (1: 담백함 ~ 10: 격정적)
-        - 문체 스타일: ${style}
+        - 감정 농도: ${intensity} (1: 담백/시크 ~ 10: 깊은 울림/새벽 2시)
+        - 톤앤매너: ${style}
 
-        [작성 가이드라인 - 최신 트렌드]
-        1. **새벽 감성:** 너무 오글거리지 않으면서도, 마음 한구석을 건드리는 톤앤매너.
-        2. **여운:** 문장이 끝난 뒤에도 생각이 나도록 생략과 함축을 사용.
-        3. **일상의 낯설게 하기:** 평범한 사물이나 풍경에서 특별한 의미를 찾아내세요.
-        4. 문장은 SNS 캡션에 바로 쓸 수 있도록 줄바꿈과 호흡을 고려하세요.
+        [트렌드 반영 작성법]
+        1. **설명하지 마세요:** 사진에 보이는 걸 그대로 쓰지 마세요. 사진 밖의 이야기를 상상하게 만드세요.
+        2. **여백의 미:** 구구절절 긴 문장보다, 짧게 끊어치는 문장이 더 울림이 큽니다.
+        3. **Nostalgia (향수):** 누구나 겪었을 법한 지난 기억을 자극하세요.
 
         [출력 형식]
         ✨ 감정 요약:
-        (사진의 분위기를 한 단어 또는 짧은 구로 요약)
+        (핵심 키워드나 짧은 분위기 묘사)
         💬 문장 1:
-        (감성 문장 1)
+        (카피 1)
         💬 문장 2:
-        (감성 문장 2)
+        (카피 2)
         💬 문장 3:
-        (감성 문장 3)
+        (카피 3)
         💬 문장 4:
-        (감성 문장 4)
+        (카피 4)
         💬 문장 5:
-        (감성 문장 5)
+        (카피 5)
     `;
 
     try {
@@ -173,7 +174,7 @@ export const generateEmotionalCopy = async (
 
         if (!summaryMatch || sentences.length === 0) {
              console.error("Failed to parse emotional copy response:", text);
-             throw new Error("감성 문장 응답을 분석하는 데 실패했습니다. 형식이 예상과 다릅니다.");
+             throw new Error("감성 분석 결과 형식이 올바르지 않습니다.");
         }
 
         return {
@@ -185,6 +186,6 @@ export const generateEmotionalCopy = async (
         if (error instanceof Error) {
             throw error;
         }
-        throw new Error("감성 문장 생성 중 알 수 없는 오류가 발생했습니다.");
+        throw new Error("감성 분석 중 오류가 발생했습니다.");
     }
 };

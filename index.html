@@ -1,11 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SNS 첫 문장 생성기</title>
+    <title>SNS 바이럴 메이커 - 알고리즘 최적화</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Babel for browser-side transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
       body {
         font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
@@ -24,6 +25,7 @@
 </head>
   <body class="bg-gray-900">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <!-- Use text/babel and explicit file extensions for imports -->
+    <script type="text/babel" data-type="module" data-presets="react,typescript" src="/index.tsx"></script>
   </body>
 </html>

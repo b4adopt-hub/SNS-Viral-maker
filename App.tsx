@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { generateSentenceAndPrompt, generateImage, generateEmotionalCopy, EmotionalCopyResult } from './services/geminiService';
+import { generateSentenceAndPrompt, generateImage, generateEmotionalCopy, EmotionalCopyResult } from './services/geminiService.ts';
 
 const SparklesIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -171,21 +171,16 @@ const InputField: React.FC<InputFieldProps> = ({ id, label, value, onChange, pla
 );
 
 const imageStyles = [
-    { value: 'Photorealistic', label: '실사' },
-    { value: 'Minimalist', label: '미니멀리스트 (요즘 트렌드)' },
+    { value: 'Photorealistic', label: '실사 (트래픽 높음)' },
+    { value: 'Minimalist', label: '미니멀리스트 (감성)' },
+    { value: 'High Contrast Black and White', label: '흑백 고대비 (시선 집중)' },
+    { value: 'Vibrant Pop Art', label: '비비드 팝아트' },
     { value: 'Cinematic', label: '시네마틱' },
-    { value: 'Film Photography', label: '필름 감성' },
+    { value: 'Film Photography', label: '필름 그레인' },
     { value: 'Cyberpunk', label: '사이버펑크' },
     { value: 'Anime', label: '애니메이션' },
-    { value: 'Watercolor', label: '수채화' },
-    { value: 'Pixel Art', label: '픽셀 아트' },
-    { value: 'Surreal', label: '초현실주의' },
-    { value: 'Abstract', label: '추상' },
-    { value: 'Ghibli Studio style', label: '지브리' },
-    { value: 'Disney style', label: '디즈니' },
-    { value: 'Korean folk painting (Minhwa) style', label: '한국 민속화' },
-    { value: 'Vincent van Gogh style', label: '반 고흐' },
-    { value: 'Andy Warhol Pop Art style', label: '앤디 워홀 팝아트' },
+    { value: 'Abstract', label: '추상화' },
+    { value: 'Ghibli Studio style', label: '지브리 스타일' },
 ];
 
 interface SelectFieldProps {
@@ -294,7 +289,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ sentence, imageUrl, playSound
             ) : (
                 <>
                     <ShareIcon className="w-5 h-5" />
-                    <span>결과 공유하기</span>
+                    <span>바이럴 포스트 복사</span>
                 </>
             )}
         </button>
@@ -379,23 +374,23 @@ const SentenceGenerator: React.FC<GeneratorProps> = ({ playSound }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InputField
                     id="theme"
-                    label="주제 (Theme)"
+                    label="콘텐츠 주제"
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
-                    placeholder="예: 강아지, 퇴사, 여행"
+                    placeholder="예: 퇴사, 연애, 갓생"
                     maxLength={20}
                 />
                 <InputField
                     id="emotion"
-                    label="감정 (Emotion)"
+                    label="타겟 감정 (반응 유도)"
                     value={emotion}
                     onChange={(e) => setEmotion(e.target.value)}
-                    placeholder="예: 빡침, 힐링, 우울"
+                    placeholder="예: 분노, 공감, 킹받음"
                     maxLength={20}
                 />
                 <SelectField
                     id="imageStyle"
-                    label="이미지 스타일"
+                    label="노출 최적화 스타일"
                     value={imageStyle}
                     onChange={(e) => setImageStyle(e.target.value)}
                     options={imageStyles}
@@ -406,22 +401,22 @@ const SentenceGenerator: React.FC<GeneratorProps> = ({ playSound }) => {
                 <button
                     onClick={() => { playSound('click'); handleGenerate(); }}
                     disabled={isGenerating}
-                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-800 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500/50"
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-indigo-800 disabled:to-purple-800 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 shadow-lg"
                 >
                     {isLoadingText ? (
                         <>
                             <LoadingSpinner />
-                            <span>최적의 알고리즘 분석 중...</span>
+                            <span>알고리즘 해킹 중...</span>
                         </>
                     ) : isLoadingImage ? (
                         <>
                             <ImageIcon className="w-5 h-5 animate-spin" />
-                            <span>고효율 이미지 생성 중...</span>
+                            <span>고효율 이미지 렌더링...</span>
                         </>
                     ) : (
                         <>
                             <SparklesIcon className="w-5 h-5" />
-                            <span>바이럴 콘텐츠 생성</span>
+                            <span>알고리즘 최적화 생성</span>
                         </>
                     )}
                 </button>
@@ -449,22 +444,25 @@ const SentenceGenerator: React.FC<GeneratorProps> = ({ playSound }) => {
                         {isLoadingText && (
                             <div className="text-center text-gray-400">
                                 <LoadingSpinner />
-                                <p className="mt-2 text-sm">트렌드에 맞는 훅(Hook)을 설계하고 있어요...</p>
+                                <p className="mt-2 text-sm text-indigo-300">최신 트렌드와 훅(Hook)을 분석하고 있습니다...</p>
                             </div>
                         )}
                         {generatedSentence && (
-                            <div className="transition-transform duration-300 hover:scale-105">
+                            <div className="transition-transform duration-300 hover:scale-105 cursor-pointer" onClick={() => {
+                                navigator.clipboard.writeText(generatedSentence);
+                                playSound('click');
+                            }}>
                                 <div className="flex justify-between items-center">
-                                    <p className="text-indigo-300 font-semibold">🔥 바이럴 후킹 문장:</p>
+                                    <p className="text-indigo-300 font-semibold text-xs uppercase tracking-wider">🔥 Stop Scroll Hook</p>
                                     <CopyButton textToCopy={generatedSentence} playSound={playSound} />
                                 </div>
-                                <p className="text-white text-xl md:text-2xl font-bold mt-2 leading-relaxed tracking-tight">{generatedSentence}</p>
+                                <p className="text-white text-xl md:text-3xl font-black mt-2 leading-snug tracking-tight drop-shadow-lg">{generatedSentence}</p>
                             </div>
                         )}
                         {generatedImagePrompt && (
                              <div className="opacity-75">
                                 <div className="flex justify-between items-center mt-4">
-                                    <p className="text-indigo-300 font-semibold text-sm">🖼️ 이미지 프롬프트:</p>
+                                    <p className="text-indigo-300 font-semibold text-sm">🖼️ AI 프롬프트 (High Engagement):</p>
                                     <CopyButton textToCopy={generatedImagePrompt} playSound={playSound} />
                                 </div>
                                 <p className="text-gray-400 text-sm mt-1 italic">"{generatedImagePrompt}"</p>
@@ -473,13 +471,13 @@ const SentenceGenerator: React.FC<GeneratorProps> = ({ playSound }) => {
                         
                         <div className="mt-4">
                             {isLoadingImage && (
-                                <div className="aspect-square bg-slate-800/50 rounded-lg flex flex-col justify-center items-center text-gray-400 transition-all duration-300">
+                                <div className="aspect-square bg-slate-800/50 rounded-lg flex flex-col justify-center items-center text-gray-400 transition-all duration-300 border border-slate-700 border-dashed">
                                     <ImageIcon className="w-12 h-12 text-gray-500 animate-pulse" />
-                                    <p className="mt-2 text-sm">피드에서 눈에 띄는 이미지를 생성 중...</p>
+                                    <p className="mt-2 text-sm">피드 장악 이미지 생성 중...</p>
                                 </div>
                             )}
                             {generatedImageUrl && (
-                                <img src={generatedImageUrl} alt={generatedImagePrompt || 'Generated image'} className="w-full h-auto rounded-lg shadow-lg aspect-square object-cover transition-transform duration-300 hover:scale-105" />
+                                <img src={generatedImageUrl} alt={generatedImagePrompt || 'Generated image'} className="w-full h-auto rounded-lg shadow-2xl aspect-square object-cover transition-transform duration-300 hover:scale-[1.02] ring-1 ring-gray-700" />
                             )}
                         </div>
                         {generatedSentence && generatedImageUrl && (
@@ -503,10 +501,10 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
     const imagePreviewRef = useRef<HTMLImageElement>(null);
     
     const writingStyles = [
-        { value: '새벽 감성', label: '새벽 감성 (트렌드)' },
-        { value: '담백한 기록', label: '담백한 기록' },
-        { value: '짧은 시', label: '짧은 시' },
-        { value: '영화 대사처럼', label: '영화 대사처럼' },
+        { value: '새벽 감성', label: '새벽 감성 (저장 유도)' },
+        { value: '담백한 기록', label: '담백한 기록 (라이프스타일)' },
+        { value: '짧은 시', label: '짧은 시 (여운)' },
+        { value: '영화 대사처럼', label: '영화 대사처럼 (공유)' },
     ];
 
     useEffect(() => {
@@ -579,10 +577,10 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
             {!image.preview ? (
                 <button
                     onClick={() => { playSound('click'); fileInputRef.current?.click(); }}
-                    className="w-full h-48 border-2 border-dashed border-gray-600 rounded-lg flex flex-col justify-center items-center text-gray-400 hover:border-indigo-500 hover:text-indigo-300 transition-all duration-300"
+                    className="w-full h-48 border-2 border-dashed border-gray-600 rounded-lg flex flex-col justify-center items-center text-gray-400 hover:border-indigo-500 hover:text-indigo-300 transition-all duration-300 bg-gray-800/30"
                 >
                     <UploadIcon className="w-10 h-10 mb-2" />
-                    <span>이미지를 업로드하세요</span>
+                    <span>분석할 사진 업로드</span>
                 </button>
             ) : (
                 <div className="relative">
@@ -605,7 +603,7 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label htmlFor="intensity" className="block mb-2 text-sm font-medium text-indigo-200">
-                        감정 강도: <span className="font-bold text-white">{intensity}</span>
+                        감정 농도: <span className="font-bold text-white">{intensity}</span>
                     </label>
                     <input
                         id="intensity"
@@ -619,7 +617,7 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
                 </div>
                  <SelectField
                     id="writingStyle"
-                    label="문체 스타일"
+                    label="문체 톤앤매너"
                     value={style}
                     onChange={(e) => setStyle(e.target.value)}
                     options={writingStyles}
@@ -634,12 +632,12 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
                 {isLoading ? (
                     <>
                         <LoadingSpinner />
-                        <span>감성 문장 생성 중...</span>
+                        <span>사진 감성 분석 중...</span>
                     </>
                 ) : (
                     <>
                         <SparklesIcon className="w-5 h-5" />
-                        <span>생성하기</span>
+                        <span>감성 카피 생성</span>
                     </>
                 )}
             </button>
@@ -656,24 +654,26 @@ const EmotionalCopywriter: React.FC<GeneratorProps> = ({ playSound }) => {
                         {isLoading && (
                              <div className="text-center text-gray-400">
                                 <LoadingSpinner />
-                                <p className="mt-2">AI가 사진의 무드를 분석하고 있어요...</p>
+                                <p className="mt-2 text-sm">AI가 사진의 무드를 텍스트로 변환 중...</p>
                             </div>
                         )}
                         {result && (
                             <div className="space-y-4">
                                 <div>
-                                    <p className="text-indigo-300 font-semibold">✨ 감정 요약:</p>
+                                    <p className="text-indigo-300 font-semibold text-sm">✨ 감성 분석 결과:</p>
                                     <div className="flex justify-between items-center mt-1">
-                                        <p className="text-white text-lg">{result.summary}</p>
+                                        <p className="text-white text-lg italic">"{result.summary}"</p>
                                         <CopyButton textToCopy={result.summary} playSound={playSound} />
                                     </div>
                                 </div>
                                 {result.sentences.map((sentence, index) => (
-                                    <div key={index}>
-                                        <p className="text-indigo-300 font-semibold">💬 문장 {index + 1}:</p>
-                                        <div className="flex justify-between items-center mt-1">
-                                            <p className="text-white text-lg">{sentence}</p>
-                                            <CopyButton textToCopy={sentence} playSound={playSound} />
+                                    <div key={index} className="border-t border-gray-800 pt-3 mt-3 first:border-0 first:pt-0 first:mt-0">
+                                        <p className="text-indigo-300 font-semibold text-xs mb-1">✍️ 옵션 {index + 1}:</p>
+                                        <div className="flex justify-between items-start">
+                                            <p className="text-white text-lg leading-relaxed">{sentence}</p>
+                                            <div className="flex-shrink-0 ml-2">
+                                                <CopyButton textToCopy={sentence} playSound={playSound} />
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
@@ -691,46 +691,46 @@ const App: React.FC = () => {
     const { isMuted, toggleMute, playSound } = useSoundEffects();
 
     const getTabClass = (tabName: 'sentence' | 'emotion') => {
-        const baseClass = "py-3 px-6 text-center font-semibold rounded-t-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400";
+        const baseClass = "py-3 px-6 text-center font-semibold rounded-t-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 w-1/2";
         if (activeTab === tabName) {
-            return `${baseClass} bg-slate-800/50 text-white`;
+            return `${baseClass} bg-slate-800/50 text-white border-t border-l border-r border-slate-700 relative z-10`;
         }
-        return `${baseClass} bg-transparent text-gray-400 hover:bg-slate-700/30 hover:text-gray-200`;
+        return `${baseClass} bg-transparent text-gray-500 hover:bg-slate-700/30 hover:text-gray-200 border-b border-slate-700`;
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-900 text-white p-4 sm:p-6 lg:p-8 flex items-center justify-center font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-slate-900 text-white p-4 sm:p-6 lg:p-8 flex items-center justify-center font-sans">
             <div className="w-full max-w-2xl mx-auto">
                 <header className="text-center mb-8">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500 mb-2">
-                        SNS 바이럴 메이커
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-2 drop-shadow-sm">
+                        SNS 바이럴 훅 메이커
                     </h1>
-                    <p className="text-lg text-gray-400">알고리즘이 선택하는 최적의 한 문장</p>
+                    <p className="text-lg text-gray-400 font-medium">알고리즘이 선택하는 최적의 한 문장</p>
                 </header>
                 
-                <div className="flex border-b border-slate-700 mb-[-1px]">
+                <div className="flex mb-[-1px]">
                      <button onClick={() => { playSound('click'); setActiveTab('sentence'); }} className={getTabClass('sentence')}>
-                        바이럴 훅(Hook) 생성
+                        🔥 바이럴 훅 생성
                     </button>
                     <button onClick={() => { playSound('click'); setActiveTab('emotion'); }} className={getTabClass('emotion')}>
-                        감성 카피라이터
+                        💧 감성 카피라이터
                     </button>
                 </div>
 
-                <main className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-b-xl rounded-tr-xl shadow-2xl p-6 sm:p-8">
+                <main className="bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-b-xl rounded-tr-xl shadow-2xl p-6 sm:p-8 relative z-0">
                     {activeTab === 'sentence' && <SentenceGenerator playSound={playSound} />}
                     {activeTab === 'emotion' && <EmotionalCopywriter playSound={playSound} />}
                 </main>
                 
-                <footer className="text-center mt-8 text-gray-500 text-sm flex justify-center items-center gap-4">
-                    <p>Powered by Google Gemini</p>
+                <footer className="text-center mt-8 text-gray-600 text-xs flex justify-center items-center gap-4">
+                    <p>Powered by Google Gemini 2.5 Flash</p>
                     <button 
                         onClick={toggleMute} 
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-gray-500 hover:text-white transition-colors"
                         aria-label={isMuted ? "소리 켜기" : "소리 끄기"}
                         title={isMuted ? "소리 켜기" : "소리 끄기"}
                     >
-                        {isMuted ? <SpeakerOffIcon className="w-5 h-5" /> : <SpeakerOnIcon className="w-5 h-5" />}
+                        {isMuted ? <SpeakerOffIcon className="w-4 h-4" /> : <SpeakerOnIcon className="w-4 h-4" />}
                     </button>
                 </footer>
             </div>
