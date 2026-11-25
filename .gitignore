@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Claude Code 로컬 설정: 승인한 명령이 비밀 값째 평문 저장될 수 있음
+**/.claude/settings.local.json
